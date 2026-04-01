@@ -1,5 +1,9 @@
-#ifndef PRODUTOS_H
-#define PRODUTOS_H
+//
+// Created by luis-tavares on 01/04/2026.
+//
+
+#ifndef PINKBEUTY_PRODUTO_H
+#define PINKBEUTY_PRODUTO_H
 
 typedef struct {
     int id;
@@ -7,9 +11,8 @@ typedef struct {
     float preco;
 } Produto;
 
-void cadastrarProduto(Produto*   produto);   
-void listarprodutos(Produto* produto, int quantidade); 
-void atualizarProduto(Produto* produto);
-void excluirProduto(Produto* produto);  
+Produto criarProduto(int id);
+void mostrar(Produto p);
+Produto atualizarPrec(Produto *p, float novoPrec);
 
-#endif // PRODUTOS_H
+#endif //PINKBEUTY_PRODUTO_H

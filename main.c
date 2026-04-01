@@ -1,60 +1,68 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "arv.h"
 #include "produto.h"
-#include "usuario.h"
 
-int main (){
-    int opcao;
-    Produto produto;
-    Usuario usuario;
+int main() {
+    Arv *raizID = NULL;
+    Arv *raizPreco = NULL;
+
+    int opcao, idBusca;
+    float novoPreco;
+    Produto p;
 
     do {
-        printf("Menu:\n");
-        printf("1. Cadastrar Produto\n");
-        printf("2. Listar Produtos\n");
-        printf("3. Atualizar Produto\n");
-        printf("4. Excluir Produto\n");
-        printf("5. Cadastrar Usuário\n");
-        printf("6. Listar Usuários\n");
-        printf("7. Atualizar Usuário\n");
-        printf("8. Excluir Usuário\n");
-        printf("0. Sair\n");
-        printf("Escolha uma opção: ");
+        printf("\n--- PINKBEUTY SYSTEM ---");
+        printf("\n1. Cadastrar Produto");
+        printf("\n2. Buscar por ID");
+        printf("\n3. Atualizar Preço (Reajuste)");
+        printf("\n0. Sair");
+        printf("\nEscolha uma opcao: ");
         scanf("%d", &opcao);
 
-        switch (opcao) {
+        switch(opcao) {
             case 1:
-                cadastrarProduto(&produto);
+                printf("Digite o ID do novo produto: ");
+                scanf("%d", &idBusca);
+
+                if (buscarID(raizID, idBusca) != NULL) {
+                    printf("Erro: Já existe um produto com o ID %d!\n", idBusca);
+                } else {
+                    p = criarProduto(idBusca);
+                    raizID = inserirID(raizID, p);
+                    raizPreco = inserirPreco(raizPreco, p);
+                    printf("\nProduto cadastrado com sucesso!");
+                }
                 break;
+
             case 2:
-                listarProdutos(&produto);
+                printf("Digite o ID para busca: ");
+                scanf("%d", &idBusca);
+                Arv *encontrado = buscarID(raizID, idBusca);
+                if(encontrado) mostrar(encontrado->produto);
+                else printf("Produto nao encontrado!\n");
                 break;
+
             case 3:
-                atualizarProduto(&produto);
+                printf("ID do produto para reajuste: ");
+                scanf("%d", &idBusca);
+                printf("Novo preço: ");
+                scanf("%f", &novoPreco);
+                reajustarPreco(&raizID, &raizPreco, idBusca, novoPreco);
                 break;
+
             case 4:
-                excluirProduto(&produto);
+                printf("ID do produto para remover: ");
+                scanf("%d", &idBusca);
+                Arv *temp = buscarID(raizID, idBusca);
+                if(temp) {
+                    float pAntigo = temp->produto.preco;
+                    raizID = removerID(raizID, idBusca);
+                    raizPreco = removerPreco(raizPreco, pAntigo, idBusca);
+                    printf("Removido com sucesso! 🗑️");
+                }
                 break;
-            case 5:
-                cadastrarUsuario(&usuario);
-                break;
-            case 6:
-                listarUsuarios(&usuario, 1);
-                break;
-            case 7:
-                atualizarUsuario(&usuario);
-                break;
-            case 8:
-                excluirUsuario(&usuario);
-                break;
-            case 0:
-                printf("Saindo...\n");
-                break;
-            default:
-                printf("Opção inválida! Tente novamente.\n");
         }
-    } while (opcao != 0);
+    } while(opcao != 0);
 
     return 0;
 }

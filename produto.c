@@ -1,77 +1,39 @@
+//
+// Created by luis-tavares on 01/04/2026.
+//
+
 #include <stdio.h>
+#include <string.h>
 #include "produto.h"
 
-Poduto produtos[100];
-int quantidadeProdutos = 0;
+Produto criarProduto(int id) {
+    Produto p;
+    p.id = id;
 
-void cadastrarProduto( Produto* produto) {
-    produto p;
+    getchar(); //limpa buffer
 
-    printf("Nome: ");
-    scanf ("%s", p.nome);
+    printf("Digite o nome do produto:");
+    fgets(p.nome, 50, stdin); //utilizado fgets para pegar até maximo de 50 caracters e pegar com espaçamento
 
-    printf("Preço: ");
+    p.nome[strcspn(p.nome, "\n")] = '\0'; //Limpeza de "\n" que o fgets pega , problema do fgets.
+
+    printf("Digite o valor do produto");
     scanf("%f", &p.preco);
 
-    printf ("Estoque: ");
-    scanf("%d", &p.estoque);
-
-    p.id = quantideProdutos + 1; // Atribui um ID único ao produto
-    produtos[quantideProdutos++] = p; // Adiciona o produto ao array e incrementa o contador    
-
-    printf("Produto cadastrado com sucesso!\n");
+    return p;
 }
 
-void listarProdutos( Produto* produto, int quantidade) {
-    for (int i = 0; i < quantidadeProdutos; i++) {
-        printf ("ID: %d\n", produtos[i].id);
-        printf ("Nome: %s\n", produtos[i].nome);    
-        printf ("Preço: %.2f\n", produtos[i].preco);
-        printf ("Estoque: %d\n", produtos[i].estoque);
-    }
+void mostrar(Produto p) {
+    printf("\n==========================");
+    printf("\nID: %d", p.id);
+    printf("\nNome: %s", p.nome);
+    printf("\nPreço: R$ %.2f", p.preco);
+    printf("\n==========================");
+
 }
 
-void atualizarProduto(Produto *produto) {
-    int id;
-
-    printf("Digite o ID do produto que deseja atualizar: ");
-    scanf("%d", &id);
-
-    for (int i = 0; i < quantidadeProdutos; i++) {
-        if (produtos[i].id == id) {
-            printf("Digite o novo nome do produto: ");
-            scanf("%s", produtos[i].nome);
-
-            printf("Digite o novo preço do produto: ");
-            scanf("%f", &produtos[i].preco);
-
-            printf("Digite o novo estoque do produto: ");
-            scanf("%d", &produtos[i].estoque);
-
-            printf("Produto atualizado com sucesso!\n");
-            return;
-        }
-    }
-    printf("Produto não encontrado!\n");
-}
-
-void excluirProduto(){
-    int id;
-
-    printf("Digite o ID do produto que deseja excluir: ");
-    scanf("%d", &id);
-
-    for (int i = 0; i < quantidadeProdutos; i++) {
-        if (produtos[i].id == id) {
-            // Move os produtos seguintes para preencher a lacuna
-            for (int j = i; j < quantidadeProdutos - 1; j++) {
-                produtos[j] = produtos[j + 1];
-            }
-            quantidadeProdutos--; // Decrementa o contador de produtos
-            printf("Produto excluído com sucesso!\n");
-            return;
-        }
-    }
-    printf("Produto não encontrado!\n");
+Produto atualizarPrec(Produto *p, float novoPrec) {
+    p->preco = novoPrec;
+    return *p;
 }
 
